@@ -38,7 +38,10 @@ app.post("/code/:id/compile",async (c) => {
     
     if (!id) {
         c.status(400);
-        return c.json({error: "invalid code"});
+        return c.json({
+            status: "failed to compile",
+            id: ""
+        })
     }
 
     if (!v4.validate(id)) {
@@ -77,7 +80,38 @@ app.post("/code/:id/compile",async (c) => {
             id: ""
         })
     }
+})
+
+app.get("/code/:id",async (c) => {
+    const id = (c.req.param() as {id: string}).id
     
+    if (!id) {
+        c.status(400);
+        return c.json({error: "invalid id"});
+    }
+
+    if (!v4.validate(id)) {
+        c.status(400)
+        return c.json({
+            error: "invalid id"
+        })
+    }
+
+    try {
+        const data =await Deno.readFile(`./files/input/${id}.rb`)
+        const encodedCode = encodeBase64(data)
+        
+        return c.json({
+            code: encodedCode,
+        })
+
+    } catch (e) {
+        console.log(e)
+        c.status(500)
+        return c.json({
+            error: "internal error"
+        })
+    }
 })
 
 Deno.serve(app.fetch);
