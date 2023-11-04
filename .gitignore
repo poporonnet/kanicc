@@ -1,3 +1,4 @@
 *.rb
 *.mrb
 a.out
+*.out

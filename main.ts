@@ -56,15 +56,13 @@ app.post("/code/:id/compile",async (c) => {
         const a = new Deno.Command("../mrbc", {
             args: [
                 "-o",
-                "a.out",
+                `./files/output/${id}.out`,
                 `./files/input/${id}.rb`
             ],
     })
         
         const output = await a.output();
-        console.log("ok")
-        console.log(new TextDecoder().decode(output.stdout))
-        const bin = await Deno.readFile(`a.out`);
+        const bin = await Deno.readFile(`./files/output/${id}.out`);
         const encodedBin = encodeBase64(bin)
         
         return c.json({
