@@ -1,5 +1,6 @@
 import { Hono } from "https://deno.land/x/hono/mod.ts";
 import { decodeBase64, encodeBase64 } from "https://deno.land/std/encoding/base64.ts";
+import {v4} from "https://deno.land/std@0.204.0/uuid/mod.ts";
 
 const app = new Hono()
 
@@ -39,7 +40,15 @@ app.post("/code/:id/compile",async (c) => {
         c.status(400);
         return c.json({error: "invalid code"});
     }
-    console.log(id)
+
+    if (!v4.validate(id)) {
+        c.status(400)
+        return c.json({
+            status: "failed to compile",
+            id: ""
+        })
+    }
+
     try {
         const a = new Deno.Command("../mrbc", {
             args: [
