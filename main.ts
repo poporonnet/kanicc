@@ -1,5 +1,5 @@
-import { Hono } from "https://deno.land/x/hono/mod.ts";
-import { decodeBase64, encodeBase64 } from "https://deno.land/std/encoding/base64.ts";
+import { Hono } from "https://deno.land/x/hono@v3.8.2/mod.ts";
+import { decodeBase64, encodeBase64 } from "https://deno.land/std@0.204.0/encoding/base64.ts";
 import {v4} from "https://deno.land/std@0.204.0/uuid/mod.ts";
 
 const app = new Hono()
