@@ -1,4 +1,5 @@
 import { Hono } from "https://deno.land/x/hono@v3.8.2/mod.ts";
+import { cors } from "https://deno.land/x/hono@v3.8.2/middleware/cors/index.ts"
 import {
   decodeBase64,
   encodeBase64,
@@ -7,9 +8,14 @@ import { v4 } from "https://deno.land/std@0.204.0/uuid/mod.ts";
 
 const app = new Hono();
 
+app.use("/*",cors({
+  origin: "*",
+}));
+
 app.post("/code", async (c) => {
   const body = await c.req.json() as { code: string };
   const code = body.code;
+
   if (!code) {
     c.status(400);
     return c.json({ error: "invalid code" });
@@ -55,7 +61,7 @@ app.post("/code/:id/compile", async (c) => {
   }
 
   try {
-    const a = new Deno.Command("../mrbc", {
+    const a = new Deno.Command("mrbc", {
       args: [
         "-o",
         `./files/output/${id}.out`,
