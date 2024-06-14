@@ -1,5 +1,10 @@
 {
   "tasks": {
     "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "@hono/hono": "jsr:@hono/hono@^4.4.6",
+    "@std/encoding": "jsr:@std/encoding@^0.224.3",
+    "@std/uuid": "jsr:@std/uuid@^0.224.3"
   }
 }
