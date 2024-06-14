@@ -1,10 +1,10 @@
-import { Hono } from "https://deno.land/x/hono@v3.8.2/mod.ts";
-import { cors } from "https://deno.land/x/hono@v3.8.2/middleware/cors/index.ts"
+import { Hono } from "@hono/hono";
+import { cors } from "@hono/hono/cors"
 import {
   decodeBase64,
   encodeBase64,
-} from "https://deno.land/std@0.204.0/encoding/base64.ts";
-import { v4 } from "https://deno.land/std@0.204.0/uuid/mod.ts";
+} from "@std/encoding";
+import { v4 } from "@std/uuid";
 
 const app = new Hono();
 

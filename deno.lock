@@ -1,5 +1,35 @@
 {
   "version": "3",
+  "packages": {
+    "specifiers": {
+      "jsr:@hono/hono@^4.4.6": "jsr:@hono/hono@4.4.6",
+      "jsr:@std/bytes@^1.0.0-rc.3": "jsr:@std/bytes@1.0.0",
+      "jsr:@std/crypto@^0.224.0": "jsr:@std/crypto@0.224.0",
+      "jsr:@std/encoding@^0.224.3": "jsr:@std/encoding@0.224.3",
+      "jsr:@std/uuid@^0.224.3": "jsr:@std/uuid@0.224.3"
+    },
+    "jsr": {
+      "@hono/hono@4.4.6": {
+        "integrity": "aa557ca9930787ee86b9ca1730691f1ce1c379174c2cb244d5934db2b6314453"
+      },
+      "@std/bytes@1.0.0": {
+        "integrity": "9392e72af80adccaa1197912fa19990ed091cb98d5c9c4344b0c301b22d7c632"
+      },
+      "@std/crypto@0.224.0": {
+        "integrity": "154ef3ff08ef535562ef1a718718c5b2c5fc3808f0f9100daad69e829bfcdf2d"
+      },
+      "@std/encoding@0.224.3": {
+        "integrity": "5e861b6d81be5359fad4155e591acf17c0207b595112d1840998bb9f476dbdaf"
+      },
+      "@std/uuid@0.224.3": {
+        "integrity": "29167a84e77038de33c217e4adbc4b5733df00f04a59659de1685479fe87b568",
+        "dependencies": [
+          "jsr:@std/bytes@^1.0.0-rc.3",
+          "jsr:@std/crypto@^0.224.0"
+        ]
+      }
+    }
+  },
   "remote": {
     "https://deno.land/std@0.204.0/assert/assert.ts": "9a97dad6d98c238938e7540736b826440ad8c1c1e54430ca4c4e623e585607ee",
     "https://deno.land/std@0.204.0/assert/assertion_error.ts": "4d0bde9b374dfbcbe8ac23f54f567b77024fb67dbb1906a852d67fe050d42f56",
@@ -55,5 +85,12 @@
     "https://deno.land/x/hono@v3.8.2/utils/url.ts": "5fc3307ef3cb2e6f34ec2a03e3d7f2126c6a9f5f0eab677222df3f0e40bd7567",
     "https://deno.land/x/hono@v3.8.2/validator/index.ts": "6c986e8b91dcf857ecc8164a506ae8eea8665792a4ff7215471df669c632ae7c",
     "https://deno.land/x/hono@v3.8.2/validator/validator.ts": "afa5e52495e0996fbba61996736fab5c486590d72d376f809e9f9ff4e0c463e9"
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@hono/hono@^4.4.6",
+      "jsr:@std/encoding@^0.224.3",
+      "jsr:@std/uuid@^0.224.3"
+    ]
   }
 }
