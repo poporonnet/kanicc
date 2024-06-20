@@ -1,8 +1,23 @@
-# kanicc - _Compile Server for Matz葉ガニロボコン_
+# kanicc - mruby, mruby/c 
 
 ## API Documents
 
-### POST /code
+### `GET /versions`
+
+コンパイラのバージョンを取得
+
+#### Response
+
+```json
+[
+  {
+    "version": "3.3.0",
+    "default": true
+  }
+]
+```
+
+### `POST /code`
 
 コードをアップロード
 
@@ -25,7 +40,7 @@
 }
 ```
 
-### GET /code/:id
+### GET `/code/:id`
 
 コードが存在するかのチェック
 
@@ -39,14 +54,16 @@
 }
 ```
 
-### POST /code/:id/compile
+### POST `/code/:id/compile`
 
 コードをコンパイル
 
 #### Request
 
 ```json
-{}
+{
+  "version": "3.3.0"
+}
 ```
 
 #### Response
@@ -59,3 +76,4 @@
   "error": "<compiler output>"
 }
 ```
+
