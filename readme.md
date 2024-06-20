@@ -11,8 +11,7 @@
 ```json
 [
   {
-    "version": "3.3.0",
-    "default": true
+    "version": "3.3.0"
   }
 ]
 ```
