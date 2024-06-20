@@ -1,4 +1,4 @@
-# kanicc - mruby, mruby/c 
+# kanicc - mruby, mruby/c online compiler
 
 ## API Documents
 
