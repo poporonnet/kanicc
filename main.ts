@@ -6,8 +6,8 @@ import {v4} from "@std/uuid";
 const app = new Hono();
 
 const compilers = Deno.readTextFileSync("./compiler.jsonc");
-const Compilers = JSON.parse(compilers) as {
-    compilers: { path: string; version: string; default: boolean }[];
+const Conpilers = JSON.parse(compilers) as {
+    compilers: { path: string; version: string }[];
 };
 
 app.use(
@@ -18,8 +18,8 @@ app.use(
 );
 
 app.get("/versions", (c) => {
-    return c.json(Compilers.compilers.map((v) => {
-        return { version: v.version, default: v.default };
+    return c.json(Conpilers.compilers.map((v) => {
+        return { version: v.version };
     }));
 });
 
@@ -73,7 +73,7 @@ app.post("/code/:id/compile", async (c) => {
     }
 
     try {
-        const compilerPath = Compilers.compilers.find((v) => v.version === version);
+        const compilerPath = Conpilers.compilers.find((v) => v.version === version);
         if (!compilerPath) {
             return c.json({
                 status: "unknown compiler version",
