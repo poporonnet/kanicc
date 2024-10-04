@@ -67,12 +67,47 @@
 
 #### Response
 
-`200 OK`
-
+`200 OK`  
+コンパイル成功時
 ```json
 {
-  "binary": "<base64 encoded mruby/c binary>",
-  "error": "<compiler output>"
+  "status": "ok",
+  "binary": "<base64 encoded mruby/c binary>"
 }
 ```
 
+`200 OK`
+コンパイル失敗時
+
+```json
+{
+  "status": "error",
+  "error": "<error message>"
+}
+```
+例:
+```json
+{
+  "status": "error",
+  "error": "input:4:0: syntax error, unexpected end of file, expecting \"'end'\"\n"
+}
+```
+
+`400 Bad Request`
+```jsonc
+{
+  // "invalid id" or "unknown compiler version"
+  "status": "<error code>"
+  // 常に空
+  "id": "",
+ }
+```
+
+`500 Internal Error`  
+他の原因で失敗した場合:
+```json
+{
+  "status": "failed to compile",
+  "id": ""
+}
+```
