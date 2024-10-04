@@ -62,14 +62,14 @@ app.post("/code/:id/compile", async (c) => {
 
   if (!id) {
     return c.json({
-      status: "failed to compile",
+      status: "invalid id",
       id: "",
     }, 400);
   }
 
   if (!v4.validate(id)) {
     return c.json({
-      status: "failed to compile",
+      status: "invalid id",
       id: "",
     }, 400);
   }
@@ -90,14 +90,21 @@ app.post("/code/:id/compile", async (c) => {
         `./files/input/${id}.rb`,
       ],
     });
-
     const output = await a.output();
+
+    if (output.code !== 0) {
+      return c.json({
+        status: "error",
+        error: new TextDecoder().decode(output.stderr),
+      })
+    }
+
     const bin = await Deno.readFile(`./files/output/${id}.out`);
     const encodedBin = encodeBase64(bin);
 
     return c.json({
-      binary: encodedBin,
-      error: new TextDecoder().decode(output.stderr),
+      status: "ok",
+      binary: encodedBin
     });
   } catch (e) {
     console.log(e);
