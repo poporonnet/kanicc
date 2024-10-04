@@ -9,6 +9,7 @@ const compilers = Deno.readTextFileSync("./compiler.jsonc");
 const Conpilers = JSON.parse(compilers) as {
   compilers: { path: string; version: string }[];
 };
+const INPUT_DIR_PATH = "./files/input/";
 
 app.use(
   "/*",
@@ -95,7 +96,7 @@ app.post("/code/:id/compile", async (c) => {
     if (output.code !== 0) {
       return c.json({
         status: "error",
-        error: new TextDecoder().decode(output.stderr),
+        error: new TextDecoder().decode(output.stderr).replace(INPUT_DIR_PATH, "").replace(`${id}.rb`, "input"),
       })
     }
 

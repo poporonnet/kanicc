@@ -85,6 +85,13 @@
   "error": "<error message>"
 }
 ```
+例:
+```json
+{
+  "status": "error",
+  "error": "input:4:0: syntax error, unexpected end of file, expecting \"'end'\"\n"
+}
+```
 
 `400 Bad Request`
 ```jsonc
