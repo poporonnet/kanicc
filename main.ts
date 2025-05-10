@@ -1,8 +1,15 @@
+import {sentry} from "@hono/sentry"
 import { Hono } from "@hono/hono";
 import { cors } from "@hono/hono/cors";
 import { decodeBase64, encodeBase64 } from "@std/encoding";
 import { v4 } from "@std/uuid";
 
+const sentryDSN = Deno.env.get("SENTRY_DSN");
+if (!sentryDSN) {
+  throw new Error("SENTRY_DSN is not set.");
+}
+
+console.debug("Sentry initialized", sentryDSN);
 const app = new Hono();
 
 const compilers = Deno.readTextFileSync("./compiler.jsonc");
@@ -18,6 +25,7 @@ app.use(
   }),
 );
 
+app.use('*', sentry({ dsn: sentryDSN }));
 app.get("/versions", (c) => {
   return c.json(Conpilers.compilers.map((v) => {
     return { version: v.version };

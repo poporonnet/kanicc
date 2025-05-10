@@ -1,33 +1,75 @@
 {
-  "version": "3",
-  "packages": {
-    "specifiers": {
-      "jsr:@hono/hono@^4.4.6": "jsr:@hono/hono@4.4.6",
-      "jsr:@std/bytes@^1.0.0-rc.3": "jsr:@std/bytes@1.0.0",
-      "jsr:@std/crypto@^0.224.0": "jsr:@std/crypto@0.224.0",
-      "jsr:@std/encoding@^0.224.3": "jsr:@std/encoding@0.224.3",
-      "jsr:@std/uuid@^0.224.3": "jsr:@std/uuid@0.224.3"
+  "version": "4",
+  "specifiers": {
+    "jsr:@std/bytes@^1.0.0-rc.3": "1.0.0",
+    "jsr:@std/crypto@0.224": "0.224.0",
+    "jsr:@std/encoding@~0.224.3": "0.224.3",
+    "jsr:@std/uuid@~0.224.3": "0.224.3",
+    "npm:@hono/sentry@^1.2.1": "1.2.1_hono@4.7.9",
+    "npm:@sentry/deno@^9.17.0": "9.17.0",
+    "npm:hono@^4.7.9": "4.7.9"
+  },
+  "jsr": {
+    "@std/bytes@1.0.0": {
+      "integrity": "9392e72af80adccaa1197912fa19990ed091cb98d5c9c4344b0c301b22d7c632"
     },
-    "jsr": {
-      "@hono/hono@4.4.6": {
-        "integrity": "aa557ca9930787ee86b9ca1730691f1ce1c379174c2cb244d5934db2b6314453"
-      },
-      "@std/bytes@1.0.0": {
-        "integrity": "9392e72af80adccaa1197912fa19990ed091cb98d5c9c4344b0c301b22d7c632"
-      },
-      "@std/crypto@0.224.0": {
-        "integrity": "154ef3ff08ef535562ef1a718718c5b2c5fc3808f0f9100daad69e829bfcdf2d"
-      },
-      "@std/encoding@0.224.3": {
-        "integrity": "5e861b6d81be5359fad4155e591acf17c0207b595112d1840998bb9f476dbdaf"
-      },
-      "@std/uuid@0.224.3": {
-        "integrity": "29167a84e77038de33c217e4adbc4b5733df00f04a59659de1685479fe87b568",
-        "dependencies": [
-          "jsr:@std/bytes@^1.0.0-rc.3",
-          "jsr:@std/crypto@^0.224.0"
-        ]
-      }
+    "@std/crypto@0.224.0": {
+      "integrity": "154ef3ff08ef535562ef1a718718c5b2c5fc3808f0f9100daad69e829bfcdf2d"
+    },
+    "@std/encoding@0.224.3": {
+      "integrity": "5e861b6d81be5359fad4155e591acf17c0207b595112d1840998bb9f476dbdaf"
+    },
+    "@std/uuid@0.224.3": {
+      "integrity": "29167a84e77038de33c217e4adbc4b5733df00f04a59659de1685479fe87b568",
+      "dependencies": [
+        "jsr:@std/bytes",
+        "jsr:@std/crypto"
+      ]
+    }
+  },
+  "npm": {
+    "@hono/sentry@1.2.1_hono@4.7.9": {
+      "integrity": "sha512-nH72brmJDSmX9jeNhHAMcdW/QCYKH00G0BMSDKiE2FuGQaR4pONPuzzM24qirjqyHcL8NDdwBJ3irE9/IsDptA==",
+      "dependencies": [
+        "hono",
+        "toucan-js"
+      ]
+    },
+    "@sentry/core@8.9.2": {
+      "integrity": "sha512-ixm8NISFlPlEo3FjSaqmq4nnd13BRHoafwJ5MG+okCz6BKGZ1SexEggP42/QpGvDprUUHnfncG6WUMgcarr1zA==",
+      "dependencies": [
+        "@sentry/types",
+        "@sentry/utils"
+      ]
+    },
+    "@sentry/core@9.17.0": {
+      "integrity": "sha512-9f1A93/kY9lLH06L1thPx94IhyLjEP3aRxYAtjtBfzId8UtubSpwP92sbxgslodD73R4tURwWJj7nYZ9HLYBUg=="
+    },
+    "@sentry/deno@9.17.0": {
+      "integrity": "sha512-T0ehcemXzRLzWs80rnGb0/SutTQh0MXBi2Nj2OA4e4zwd7perA/7IwXExObWKtmp1aRIJzGdKGRbmLom8kvAlA==",
+      "dependencies": [
+        "@sentry/core@9.17.0"
+      ]
+    },
+    "@sentry/types@8.9.2": {
+      "integrity": "sha512-+LFOyQGl+zk5SZRGZD2MEURf7i5RHgP/mt3s85Rza+vz8M211WJ0YsjkIGUJFSY842nged5QLx4JysLaBlLymg=="
+    },
+    "@sentry/utils@8.9.2": {
+      "integrity": "sha512-A4srR9mEBFdVXwSEKjQ94msUbVkMr8JeFiEj9ouOFORw/Y/ux/WV2bWVD/ZI9wq0TcTNK8L1wBgU8UMS5lIq3A==",
+      "dependencies": [
+        "@sentry/types"
+      ]
+    },
+    "hono@4.7.9": {
+      "integrity": "sha512-/EsCoR5h7N4yu01TDu9GMCCJa6ZLk5ZJIWFFGNawAXmd1Tp53+Wir4xm0D2X19bbykWUlzQG0+BvPAji6p9E8Q=="
+    },
+    "toucan-js@4.1.1": {
+      "integrity": "sha512-GTPwEaCRN8IbYe5/VeGiwxYvMO0dKaC16fTeLbF+QGswjkLZ9JUqAfDhLMyH2SWukYhmetH+uxWa1Bhluv/evQ==",
+      "dependencies": [
+        "@sentry/core@8.9.2",
+        "@sentry/types",
+        "@sentry/utils"
+      ]
     }
   },
   "remote": {
@@ -88,9 +130,11 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@hono/hono@^4.4.6",
-      "jsr:@std/encoding@^0.224.3",
-      "jsr:@std/uuid@^0.224.3"
+      "jsr:@std/encoding@~0.224.3",
+      "jsr:@std/uuid@~0.224.3",
+      "npm:@hono/sentry@^1.2.1",
+      "npm:@sentry/deno@^9.17.0",
+      "npm:hono@^4.7.9"
     ]
   }
 }
