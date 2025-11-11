@@ -2,6 +2,12 @@
 
 ## API Documents
 
+<details>
+<summary>複数ファイルの扱いについて</summary>
+
+kaniccは複数ファイルのアップロード・コンパイルをサポートしています。複数ファイルモードでは、入出力の`code`や`binary`はBase64文字列の配列になります。また、URL中のIDは、複数のIDを`_`で連結した文字列になります。詳細は各エンドポイントを参照してください。
+</details>
+
 ### `GET /versions`
 
 コンパイラのバージョンを取得
@@ -20,7 +26,9 @@
 
 コードをアップロード
 
-#### Request
+#### 単一ファイルの場合
+
+##### Request
 
 ```json
 {
@@ -28,7 +36,7 @@
 }
 ```
 
-#### Response
+##### Response
 
 `Status 200`
 
@@ -39,11 +47,40 @@
 }
 ```
 
+#### 複数ファイルの場合
+
+##### Request
+
+```json
+{
+  "code": [
+    "<base64 encoded Ruby Code>",
+    "<base64 encoded Ruby Code>",
+    "<base64 encoded Ruby Code>"
+  ]
+}
+```
+
+##### Response
+
+`Status 200`
+
+```json
+{
+  "status": "ok",
+  "id": "eeec7e5e-d4f9-492d-b83f-b1f8d4c8b9e7_2d8a56d2-23ef-4811-bc9f-ebdc339da72a_3c02a426-85b3-48f6-8087-f4836b6d801f"
+}
+```
+
+- `id`はそれぞれのファイルに対応するIDを`_`で連結した文字列です。
+
 ### GET `/code/:id`
 
 コードが存在するかのチェック
 
-#### Response
+#### 単一ファイルの場合
+
+##### Response
 
 `Status 200`
 
@@ -53,11 +90,28 @@
 }
 ```
 
+#### 複数ファイルの場合
+
+URLの`:id`の部分に複数のファイルIDを`_`で結合した文字列を指定します。
+- 例: `/code/2d8a56d2-23ef-4811-bc9f-ebdc339da72a_3c02a426-85b3-48f6-8087-f4836b6d801f`
+
+##### Response
+
+`Status 200`
+
+```json
+{
+  "code": ["<base64 encoded Ruby Code>"]
+}
+```
+
 ### POST `/code/:id/compile`
 
 コードをコンパイル
 
-#### Request
+#### 単一ファイルの場合
+
+##### Request
 
 ```json
 {
@@ -65,7 +119,7 @@
 }
 ```
 
-#### Response
+##### Response
 
 `200 OK`  
 コンパイル成功時
@@ -109,5 +163,30 @@
 {
   "status": "failed to compile",
   "id": ""
+}
+```
+
+#### 複数ファイルの場合
+
+URLの`:id`の部分に複数のファイルIDを`_`で結合した文字列を指定します。  
+- 例: `/code/2d8a56d2-23ef-4811-bc9f-ebdc339da72a_3c02a426-85b3-48f6-8087-f4836b6d801f/compile`
+
+
+##### Request
+
+```json
+{
+  "version": "3.3.0"
+}
+```
+
+##### Response
+
+`200 OK`  
+コンパイル成功時
+```json
+{
+  "status": "ok",
+  "binary": ["<base64 encoded mruby/c binary>"]
 }
 ```
