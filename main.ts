@@ -36,29 +36,36 @@ app.get("/versions", (c) => {
  * コードをアップロード
  */
 app.post("/code", async (c) => {
-  const body = await c.req.json() as { code: string };
-  const code = body.code;
+  const body = (await c.req.json()) as { code: string | string[] };
+  const codes = typeof body.code === "string" ? [body.code] : body.code;
+  const ids: string[] = [];
 
-  if (!code) {
-    return c.json({ error: "invalid code" }, 400);
-  }
+  for (const code of codes) {
+    if (!code) {
+      return c.json({ error: "invalid code" }, 400);
+    }
 
-  const decoded = decodeBase64(code);
+    const decoded = decodeBase64(code);
 
-  const id = crypto.randomUUID();
+    const id = crypto.randomUUID();
+    ids.push(id);
 
-  try {
-    await Deno.writeFile(`./files/input/${id}.rb`, decoded);
-  } catch {
-    return c.json({
-      status: "failed to write file",
-      id: "",
-    }, 500);
+    try {
+      await Deno.writeFile(`./files/input/${id}.rb`, decoded);
+    } catch {
+      return c.json(
+        {
+          status: "failed to write file",
+          id: "",
+        },
+        500
+      );
+    }
   }
 
   return c.json({
     status: "ok",
-    id: id,
+    id: ids.join("_"),
   });
 });
 
