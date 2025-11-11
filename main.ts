@@ -155,32 +155,42 @@ app.post("/code/:id/compile", async (c) => {
  * コードの存在チェック
  */
 app.get("/code/:id", async (c) => {
-  const id = (c.req.param() as { id: string }).id;
+  const ids = (c.req.param() as { id: string }).id.split("_");
+  const codes: string[] = [];
 
-  if (!id) {
-    return c.json({ error: "invalid id" }, 400);
+  for (const id of ids) {
+    if (!id) {
+      return c.json({ error: "invalid id" }, 400);
+    }
+
+    if (!v4.validate(id)) {
+      c.status(400);
+      return c.json(
+        {
+          error: "invalid id",
+        },
+        400
+      );
+    }
+
+    try {
+      const data = await Deno.readFile(`./files/input/${id}.rb`);
+      const encodedCode = encodeBase64(data);
+      codes.push(encodedCode);
+    } catch (e) {
+      console.log(e);
+      return c.json(
+        {
+          error: "internal error",
+        },
+        400
+      );
+    }
   }
 
-  if (!v4.validate(id)) {
-    c.status(400);
-    return c.json({
-      error: "invalid id",
-    }, 400);
-  }
-
-  try {
-    const data = await Deno.readFile(`./files/input/${id}.rb`);
-    const encodedCode = encodeBase64(data);
-
-    return c.json({
-      code: encodedCode,
-    });
-  } catch (e) {
-    console.log(e);
-    return c.json({
-      error: "internal error",
-    }, 400);
-  }
+  return c.json({
+    code: codes.length === 1 ? codes[0] : codes,
+  });
 });
 
 Deno.serve(app.fetch);
