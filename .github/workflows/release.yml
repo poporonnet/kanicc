@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: denoland/setup-deno@v2
+      - run: deno compile --target x86_64-unknown-linux-gnu --allow-net --allow-read --allow-write --allow-run --allow-env -o kanicc-linux-x86_64 main.ts
+      - uses: actions/upload-artifact@v6
+        with:
+          name: kanicc-linux-x86_64
+          path: kanicc-linux-x86_64
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v7
+      - run: gh release create ${{ inputs.version }} --generate-notes kanicc-linux-x86_64/kanicc-linux-x86_64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
