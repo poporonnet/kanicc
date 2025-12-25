@@ -14,8 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: denoland/setup-deno@v2
-      - run: deno compile --target x86_64-unknown-linux-gnu --allow-net --allow-read --allow-write --allow-run --allow-env -o kanicc-linux-x86_64 main.ts
-      - uses: actions/upload-artifact@v6
+        with:
+          deno-version: v2.x
+      
+      - name: Run deno compile
+        run: deno compile --target x86_64-unknown-linux-gnu --allow-net --allow-read --allow-write --allow-run --allow-env -o kanicc-linux-x86_64 main.ts
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
         with:
           name: kanicc-linux-x86_64
           path: kanicc-linux-x86_64
@@ -27,7 +33,12 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/download-artifact@v7
-      - run: gh release create ${{ inputs.version }} --generate-notes kanicc-linux-x86_64/kanicc-linux-x86_64
+      - name: Download artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: kanicc-linux-x86_64
+
+      - name: Create release
+        run: gh release create ${{ inputs.version }} --generate-notes kanicc-linux-x86_64/kanicc-linux-x86_64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
