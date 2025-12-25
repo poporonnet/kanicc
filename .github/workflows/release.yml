@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g., v1.0.0)'
+        description: "Release version (e.g., v1.0.0)"
         required: true
         type: string
 
@@ -16,7 +16,6 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      
       - name: Run deno compile
         run: deno compile --target x86_64-unknown-linux-gnu --allow-net --allow-read --allow-write --allow-run --allow-env -o kanicc-linux-x86_64 main.ts
 
@@ -39,6 +38,6 @@ jobs:
           name: kanicc-linux-x86_64
 
       - name: Create release
-        run: gh release create ${{ inputs.version }} --generate-notes kanicc-linux-x86_64/kanicc-linux-x86_64
+        run: gh release create ${{ inputs.version }} --generate-notes --repo ${{ github.repository }} kanicc-linux-x86_64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
