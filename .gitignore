@@ -2,3 +2,4 @@
 *.mrb
 a.out
 *.out
+compiler.jsonc
