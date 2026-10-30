@@ -54,10 +54,10 @@ type CompilerLock = {
 
 //** 仮コンパイルに使うダミーファイルを管理するDisposable */
 class DummyFile implements Disposable {
-  path: string;
+  readonly path: string;
 
-  constructor(path: string) {
-    this.path = path;
+  constructor() {
+    this.path = Deno.makeTempFileSync({ suffix: ".rb" });
     Deno.writeTextFileSync(this.path, "");
   }
 
@@ -72,7 +72,7 @@ const compilerJson = Deno.readTextFileSync(COMPILER_JSON_PATH);
 const compilers = v.parse(CompilerJsonSchema, compilerJson);
 const compilerLockMap = new Map<Version, CompilerLock[Version]>();
 {
-  using file = new DummyFile("./files/dummy.rb");
+  using file = new DummyFile();
   for (const { path, version } of compilers.compilers) {
     if (compilerLockMap.has(version)) {
       throw new Error(`Duplicated version specified: ${version}`);
