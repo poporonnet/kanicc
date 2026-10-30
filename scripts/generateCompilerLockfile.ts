@@ -52,7 +52,7 @@ type CompilerLock = {
 
 // --- Disposable定義 ---
 
-//** 仮コンパイルに使うダミーファイルを管理するDisposable */
+/** 仮コンパイルに使うダミーファイルを管理するDisposable */
 class DummyFile implements Disposable {
   readonly path: string;
 
