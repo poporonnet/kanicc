@@ -7,7 +7,6 @@
     "@hono/hono": "npm:hono@^4.7.9",
     "@std/encoding": "jsr:@std/encoding@^0.224.3",
     "@std/jsonc": "jsr:@std/jsonc@^1.0.3",
-    "@std/path": "jsr:@std/path@^1.1.6",
     "@std/uuid": "jsr:@std/uuid@^0.224.3",
     "@sentry/deno": "npm:@sentry/deno@^9.17.0",
     "@hono/sentry": "npm:@hono/sentry@^1.2.1",

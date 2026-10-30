@@ -1,6 +1,5 @@
 import * as v from "@valibot/valibot";
 import { parse as parseJsonc } from "@std/jsonc";
-import { resolve } from "@std/path";
 
 // --- 定数定義 ---
 
@@ -10,7 +9,7 @@ const COMPILER_LOCK_JSON_PATH = "./compiler.lock.json";
 // --- スキーマ定義 ---
 
 /** compiler.jsonc中のpathのスキーマ */
-const PathSchema = v.pipe(v.string(), v.transform(resolve), v.brand("Path"));
+const PathSchema = v.pipe(v.string(), v.brand("Path"));
 type Path = v.InferOutput<typeof PathSchema>;
 /** compiler.jsonc中のversionのスキーマ */
 const VersionSchema = v.pipe(v.string(), v.brand("Version"));
