@@ -41,7 +41,7 @@ app.use(
 app.use("*", sentry({ dsn: sentryDSN }));
 app.get("/versions", (c) => {
   return c.json(
-    compilerMap.values().map(({ version, rite }) => ({ version, rite })),
+    [...compilerMap.values()].map(({ version, rite }) => ({ version, rite })),
   );
 });
 
