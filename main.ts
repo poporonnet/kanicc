@@ -12,7 +12,17 @@ if (!sentryDSN) {
 console.debug("Sentry initialized", sentryDSN);
 const app = new Hono();
 
-const compilerJson = Deno.readTextFileSync("./compiler.lock.json");
+const readCompilerLockJson = () => {
+  try {
+    return Deno.readTextFileSync("./compiler.lock.json");
+  } catch (err) {
+    throw new Error(
+      "No lockfile found. You may run `deno task generate:lockfile` first.",
+      { cause: err },
+    );
+  }
+};
+const compilerJson = readCompilerLockJson();
 const compilers = JSON.parse(compilerJson) as {
   version: string;
   path: string;
