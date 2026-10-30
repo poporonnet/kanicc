@@ -21,7 +21,7 @@
 }
 ```
 
-`compiler.jsonc`の変更後、設定確認のため以下のコマンドでlockfileを生成する必要があります。これを行うまで`compiler.json`の変更は反映されないことに注意してください。
+`compiler.jsonc`の変更後、設定確認のため以下のコマンドでlockfileを生成する必要があります。これを行うまで`compiler.jsonc`の変更は反映されないことに注意してください。
 ```bash
 deno task generate:lockfile
 ```
