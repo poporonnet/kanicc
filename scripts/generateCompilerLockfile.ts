@@ -106,4 +106,4 @@ Deno.writeTextFileSync(
   JSON.stringify(compilerLock, undefined, 2),
 );
 
-console.log("✅ Generated lockfile.")
+console.log("✅ Generated lockfile.");
