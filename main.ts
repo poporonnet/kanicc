@@ -1,4 +1,4 @@
-import {sentry} from "@hono/sentry"
+import { sentry } from "@hono/sentry";
 import { Hono } from "@hono/hono";
 import { cors } from "@hono/hono/cors";
 import { decodeBase64, encodeBase64 } from "@std/encoding";
@@ -26,7 +26,7 @@ app.use(
   }),
 );
 
-app.use('*', sentry({ dsn: sentryDSN }));
+app.use("*", sentry({ dsn: sentryDSN }));
 app.get("/versions", (c) => {
   return c.json(
     compilerVersions.map((version) => ({
@@ -62,7 +62,7 @@ app.post("/code", async (c) => {
           status: "failed to write file",
           id: "",
         },
-        500
+        500,
       );
     }
   }
@@ -88,7 +88,7 @@ app.post("/code/:id/compile", async (c) => {
           status: "invalid id",
           id: "",
         },
-        400
+        400,
       );
     }
 
@@ -98,7 +98,7 @@ app.post("/code/:id/compile", async (c) => {
           status: "invalid id",
           id: "",
         },
-        400
+        400,
       );
     }
 
@@ -109,7 +109,7 @@ app.post("/code/:id/compile", async (c) => {
             status: "unknown compiler version",
             id: "",
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -127,7 +127,7 @@ app.post("/code/:id/compile", async (c) => {
             .replace(INPUT_DIR_PATH, "")
             .replace(
               `${id}.rb`,
-              ids.length === 1 ? "input" : `input(#${index + 1})`
+              ids.length === 1 ? "input" : `input(#${index + 1})`,
             ),
         });
       }
@@ -142,7 +142,7 @@ app.post("/code/:id/compile", async (c) => {
           status: "failed to compile",
           id: "",
         },
-        500
+        500,
       );
     }
   }
@@ -171,7 +171,7 @@ app.get("/code/:id", async (c) => {
         {
           error: "invalid id",
         },
-        400
+        400,
       );
     }
 
@@ -185,7 +185,7 @@ app.get("/code/:id", async (c) => {
         {
           error: "internal error",
         },
-        400
+        400,
       );
     }
   }
