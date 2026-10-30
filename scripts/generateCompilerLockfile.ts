@@ -44,11 +44,10 @@ const CommandOutputToRiteSchema = v.pipe(
 
 /** 生成するlockfileのデータの型 */
 type CompilerLock = {
-  [v in Version]: {
-    path: Path;
-    rite: Rite;
-  };
-};
+  version: Version;
+  path: Path;
+  rite: Rite;
+}[];
 
 // --- Disposable定義 ---
 
@@ -70,7 +69,7 @@ class DummyFile implements Disposable {
 
 const compilerJson = Deno.readTextFileSync(COMPILER_JSON_PATH);
 const compilers = v.parse(CompilerJsonSchema, compilerJson);
-const compilerLockMap = new Map<Version, CompilerLock[Version]>();
+const compilerLockMap = new Map<Version, CompilerLock[number]>();
 {
   using file = new DummyFile();
   for (const { path, version } of compilers.compilers) {
@@ -92,15 +91,13 @@ const compilerLockMap = new Map<Version, CompilerLock[Version]>();
     }
 
     const rite = v.parse(CommandOutputToRiteSchema, output.stdout);
-    compilerLockMap.set(version, { path, rite });
+    compilerLockMap.set(version, { version, path, rite });
   }
 }
 
 // --- lockfileを出力 ---
 
-const compilerLock: CompilerLock = Object.fromEntries(
-  compilerLockMap.entries(),
-);
+const compilerLock: CompilerLock = [...compilerLockMap.values()];
 Deno.writeTextFileSync(
   COMPILER_LOCK_JSON_PATH,
   JSON.stringify(compilerLock, undefined, 2),

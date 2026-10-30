@@ -13,10 +13,12 @@ console.debug("Sentry initialized", sentryDSN);
 const app = new Hono();
 
 const compilerJson = Deno.readTextFileSync("./compiler.lock.json");
-const compiler = JSON.parse(compilerJson) as {
-  [version: string]: { path: string; rite: string };
-};
-const compilerVersions = Object.entries(compiler).map(([version, _]) => version);
+const compilers = JSON.parse(compilerJson) as {
+  version: string;
+  path: string;
+  rite: string;
+}[];
+const compilerMap = new Map(compilers.map((entry) => [entry.version, entry]));
 const INPUT_DIR_PATH = "./files/input/";
 
 app.use(
@@ -29,10 +31,7 @@ app.use(
 app.use("*", sentry({ dsn: sentryDSN }));
 app.get("/versions", (c) => {
   return c.json(
-    compilerVersions.map((version) => ({
-      version,
-      rite: compiler[version].rite,
-    })),
+    compilerMap.values().map(({ version, rite }) => ({ version, rite })),
   );
 });
 
@@ -103,7 +102,8 @@ app.post("/code/:id/compile", async (c) => {
     }
 
     try {
-      if (!Object.hasOwn(compiler, version)) {
+      const compiler = compilerMap.get(version);
+      if (!compiler) {
         return c.json(
           {
             status: "unknown compiler version",
@@ -113,8 +113,7 @@ app.post("/code/:id/compile", async (c) => {
         );
       }
 
-      const compilerPath = compiler[version].path;
-      const a = new Deno.Command(compilerPath, {
+      const a = new Deno.Command(compiler.path, {
         args: ["-o", `./files/output/${id}.out`, `./files/input/${id}.rb`],
       });
       const output = await a.output();
