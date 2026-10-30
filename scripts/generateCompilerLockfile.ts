@@ -57,7 +57,6 @@ class DummyFile implements Disposable {
 
   constructor() {
     this.path = Deno.makeTempFileSync({ suffix: ".rb" });
-    Deno.writeTextFileSync(this.path, "");
   }
 
   [Symbol.dispose]() {
