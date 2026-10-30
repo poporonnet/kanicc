@@ -1,5 +1,32 @@
 # kanicc - mruby, mruby/c online compiler
 
+## 設定方法
+
+設定ファイルは`compiler.jsonc`です。以下のような形式で記述します。\
+`version`がファイル内でユニークでなければならないことに注意してください。
+
+```jsonc
+{
+  // 使用するコンパイラのリスト
+  "compilers": [
+    {
+      "path": "/path/to/mrbc", // mrbcのパス
+      "version": "3.3.0" // そのmrbcのバージョン
+    },
+    {
+      "path": "/path/to/mrbc4", // ファイル名がmrbcである必要はない
+      "version": "4.0.0" // バージョン表記は重複してはならない
+    }
+  ]
+}
+```
+
+`compiler.jsonc`の変更後、設定確認のため以下のコマンドでlockfileを生成する必要があります。これを行うまで`compiler.jsonc`の変更は反映されないことに注意してください。
+```bash
+deno task generate:lockfile
+```
+成功すると`compiler.lock.json`が生成されます。失敗した場合、`compiler.jsonc`に誤りがないか確かめてください。
+
 ## API Documents
 
 <details>
@@ -17,7 +44,8 @@ kaniccは複数ファイルのアップロード・コンパイルをサポー�
 ```json
 [
   {
-    "version": "3.3.0"
+    "version": "3.3.0",
+    "rite": "RITE0300"
   }
 ]
 ```

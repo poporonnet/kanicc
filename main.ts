@@ -1,4 +1,4 @@
-import {sentry} from "@hono/sentry"
+import { sentry } from "@hono/sentry";
 import { Hono } from "@hono/hono";
 import { cors } from "@hono/hono/cors";
 import { decodeBase64, encodeBase64 } from "@std/encoding";
@@ -12,10 +12,26 @@ if (!sentryDSN) {
 console.debug("Sentry initialized", sentryDSN);
 const app = new Hono();
 
-const compilers = Deno.readTextFileSync("./compiler.jsonc");
-const Conpilers = JSON.parse(compilers) as {
-  compilers: { path: string; version: string }[];
+const readCompilerLockJson = () => {
+  try {
+    return Deno.readTextFileSync("./compiler.lock.json");
+  } catch (err) {
+    if (err instanceof Deno.errors.NotFound) {
+      throw new Error(
+        "No lockfile found. You may run `deno task generate:lockfile` first.",
+        { cause: err },
+      );
+    }
+    throw err;
+  }
 };
+const compilerJson = readCompilerLockJson();
+const compilers = JSON.parse(compilerJson) as {
+  version: string;
+  path: string;
+  rite: string;
+}[];
+const compilerMap = new Map(compilers.map((entry) => [entry.version, entry]));
 const INPUT_DIR_PATH = "./files/input/";
 
 app.use(
@@ -25,11 +41,11 @@ app.use(
   }),
 );
 
-app.use('*', sentry({ dsn: sentryDSN }));
+app.use("*", sentry({ dsn: sentryDSN }));
 app.get("/versions", (c) => {
-  return c.json(Conpilers.compilers.map((v) => {
-    return { version: v.version };
-  }));
+  return c.json(
+    [...compilerMap.values()].map(({ version, rite }) => ({ version, rite })),
+  );
 });
 
 /**
@@ -58,7 +74,7 @@ app.post("/code", async (c) => {
           status: "failed to write file",
           id: "",
         },
-        500
+        500,
       );
     }
   }
@@ -84,7 +100,7 @@ app.post("/code/:id/compile", async (c) => {
           status: "invalid id",
           id: "",
         },
-        400
+        400,
       );
     }
 
@@ -94,25 +110,23 @@ app.post("/code/:id/compile", async (c) => {
           status: "invalid id",
           id: "",
         },
-        400
+        400,
       );
     }
 
     try {
-      const compilerPath = Conpilers.compilers.find(
-        (v) => v.version === version
-      );
-      if (!compilerPath) {
+      const compiler = compilerMap.get(version);
+      if (!compiler) {
         return c.json(
           {
             status: "unknown compiler version",
             id: "",
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
-      const a = new Deno.Command(compilerPath.path, {
+      const a = new Deno.Command(compiler.path, {
         args: ["-o", `./files/output/${id}.out`, `./files/input/${id}.rb`],
       });
       const output = await a.output();
@@ -125,7 +139,7 @@ app.post("/code/:id/compile", async (c) => {
             .replace(INPUT_DIR_PATH, "")
             .replace(
               `${id}.rb`,
-              ids.length === 1 ? "input" : `input(#${index + 1})`
+              ids.length === 1 ? "input" : `input(#${index + 1})`,
             ),
         });
       }
@@ -140,7 +154,7 @@ app.post("/code/:id/compile", async (c) => {
           status: "failed to compile",
           id: "",
         },
-        500
+        500,
       );
     }
   }
@@ -169,7 +183,7 @@ app.get("/code/:id", async (c) => {
         {
           error: "invalid id",
         },
-        400
+        400,
       );
     }
 
@@ -183,7 +197,7 @@ app.get("/code/:id", async (c) => {
         {
           error: "internal error",
         },
-        400
+        400,
       );
     }
   }

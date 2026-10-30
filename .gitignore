@@ -3,3 +3,4 @@
 a.out
 *.out
 compiler.jsonc
+compiler.lock.json
