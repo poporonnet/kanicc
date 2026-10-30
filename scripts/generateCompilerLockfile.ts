@@ -44,7 +44,7 @@ const CommandOutputToRiteSchema = v.pipe(
 
 /** 生成するlockfileのデータの型 */
 type CompilerLock = {
-  [v in Version]?: {
+  [v in Version]: {
     path: Path;
     rite: Rite;
   };
@@ -70,11 +70,11 @@ class DummyFile implements Disposable {
 
 const compilerJson = Deno.readTextFileSync(COMPILER_JSON_PATH);
 const compilers = v.parse(CompilerJsonSchema, compilerJson);
-const compilerLock: CompilerLock = {};
+const compilerLockMap = new Map<Version, CompilerLock[Version]>();
 {
   using file = new DummyFile("./files/dummy.rb");
   for (const { path, version } of compilers.compilers) {
-    if (compilerLock[version]) {
+    if (compilerLockMap.has(version)) {
       throw new Error(`Duplicated version specified: ${version}`);
     }
 
@@ -89,12 +89,15 @@ const compilerLock: CompilerLock = {};
     }
 
     const rite = v.parse(CommandOutputToRiteSchema, output.stdout);
-    compilerLock[version] = { path, rite };
+    compilerLockMap.set(version, { path, rite });
   }
 }
 
 // --- lockfileを出力 ---
 
+const compilerLock: CompilerLock = Object.fromEntries(
+  compilerLockMap.entries(),
+);
 Deno.writeTextFileSync(
   COMPILER_LOCK_JSON_PATH,
   JSON.stringify(compilerLock, undefined, 2),
