@@ -16,10 +16,13 @@ const readCompilerLockJson = () => {
   try {
     return Deno.readTextFileSync("./compiler.lock.json");
   } catch (err) {
-    throw new Error(
-      "No lockfile found. You may run `deno task generate:lockfile` first.",
-      { cause: err },
-    );
+    if (err instanceof Deno.errors.NotFound) {
+      throw new Error(
+        "No lockfile found. You may run `deno task generate:lockfile` first.",
+        { cause: err },
+      );
+    }
+    throw err;
   }
 };
 const compilerJson = readCompilerLockJson();
