@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --watch main.ts",
+    "generate:lockfile": "deno run --allow-read --allow-write --allow-run scripts/generateCompilerLockfile.ts"
   },
   "imports": {
     "@hono/hono": "npm:hono@^4.7.9",
