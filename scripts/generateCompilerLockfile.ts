@@ -83,8 +83,11 @@ const compilerLockMap = new Map<Version, CompilerLock[Version]>();
     });
     const output = await command.output();
     if (!output.success) {
+      const decoder = new TextDecoder();
       throw new Error(
-        `${path} exited with code ${output.code}: ${output.stderr}`,
+        `${path} exited with code ${output.code}: ${
+          decoder.decode(output.stderr)
+        }`,
       );
     }
 
